@@ -10,10 +10,10 @@ void UART_init(void)
     mmio_write(UART0_CR, 0x00000000);
 
     mmio_write(GPPUD, 0x00000000);
-    delay_count(150);
+    delay_count(1500);
 
     mmio_write(GPPUDCLK0, (1 << 14) | (1 << 15));
-    delay_count(150);
+    delay_count(1500);
 
     mmio_write(GPPUDCLK0, 0x00000000);
 

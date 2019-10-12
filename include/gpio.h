@@ -10,7 +10,7 @@
 #endif
  
 
-#define GPPUD (GPIO_BASE + 0x94)
-#define GPPUDCLK0 (GPIO_BASE + 0x98)
+#define GPPUD       (GPIO_BASE + 0x94)
+#define GPPUDCLK0   (GPIO_BASE + 0x98)
 
 #endif

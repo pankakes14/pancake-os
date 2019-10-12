@@ -3,15 +3,16 @@
 CC = ../tools/gcc-arm-none-eabi-8-2019-q3-update/bin/arm-none-eabi-gcc
 
 # Top level constants
-RASPI_MODEL = 1
+RASPI_MODEL = 2
 OUTPUT_IMAGE_NAME = pancake_os.img
 
 # Set any constants based on the raspberry pi model.  Version 1 has some differences to 2 and 3
 ifeq ($(RASPI_MODEL),1)
     CPU = arm1176jzf-s
-    DIRECTIVES = -D MODEL_1
+    DIRECTIVES = -D RPI_MAJOR_VERSION=1
 else
     CPU = cortex-a7
+    DIRECTIVES = -D RPI_MAJOR_VERSION=2
 endif
 
 #c flags
@@ -27,10 +28,10 @@ OBJ_DIR = build
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c) \
 			$(wildcard $(SRC_DIR)/drivers/*.c)
+
 ASM_FILES = $(SRC_DIR)/boot.s
 
 OBJECTS   = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
-OBJECTS  += $(patsubst $(SRC_DIR)/drivers/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 OBJECTS  += $(patsubst $(SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(ASM_FILES))
 
 HEADERS  = $(wildcard $(HEADER_DIR)/*.h)
@@ -65,6 +66,6 @@ clean:
 	rm -rf $(OBJ_DIR)
 	rm $(OUTPUT_IMAGE_NAME)
 
-#this doesn't work right meow
+#run the system emulator
 run : build
-	qemu-system-arm -m 256 -M raspi1 -serial stdio -kernel kernel.img
+	qemu-system-arm -m 256 -M raspi2 -serial stdio -kernel pancake_os.img
