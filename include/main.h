@@ -1,5 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
+#include <stdint.h>
 
 //============    BUILD SWITCHES!! ========================
 #define RPI_MAJOR_VERSION 1
@@ -23,7 +24,7 @@ static inline uint32_t mmio_read(uint32_t reg)
 //trying to do this in a way that the compiler won't optimize away
 static inline void delay_count(uint32_t count)
 {
-    volatile temp = count;
+    volatile uint32_t temp = count;
     while (temp > 0)
     {
         temp--;

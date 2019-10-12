@@ -15,7 +15,7 @@ else
 endif
 
 #c flags
-CFLAGS = -mcpu=$(CPU) -fpic -ffreestanding $(DIRECTIVES) 
+CFLAGS = -mcpu=$(CPU) -fpic -ffreestanding $(DIRECTIVES) -nostdlib
 CSRCFLAGS = -O2 -Wall -Wextra
 LFLAGS = -ffreestanding -O2 -nostdlib
 
@@ -42,20 +42,23 @@ HEADERS  = $(wildcard $(HEADER_DIR)/*.h)
 # Take object files and link the final image!
 build : $(OBJECTS) $(HEADERS)
 	echo $(OBJECTS)
-	$(CC) -T linker.ld -o $(OUTPUT_IMAGE_NAME) $(LFLAGS) $(OBJECTS)
+	mkdir -p $(@D)
+	$(CC) -T linker.ld -o $(OUTPUT_IMAGE_NAME) $(LFLAGS) -I$(HEADER_DIR) $(OBJECTS)
 
+# # Build 'driver' c files
+$(OBJ_DIR)/%.o : $(SRC_DIR)/drivers/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I$(SRC_DIR)/drivers -I$(HEADER_DIR) -c $< -o $@ $(CSRCFLAGS)
 
 # Build the object files from the top level c files
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -I$(KER_SRC) -I$(KER_HEAD) -c $< -o $@ $(CSRCFLAGS)
-
-# Build 'driver' c files
-$(OBJ_DIR)/%.o : $(SRC_DIR)/drivers/%.c
-	$(CC) $(CFLAGS) -I$(KER_SRC) -I$(KER_HEAD) -c $< -o $@ $(CSRCFLAGS)
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I$(SRC_DIR) -I$(HEADER_DIR) -c $< -o $@ $(CSRCFLAGS)
 
 #build object files from asm files
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.s
-	$(CC) $(CFLAGS) -I$(KER_SRC) -c $< -o $@
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I$(SRC_DIR) -c $< -o $@
 
 
 clean:
