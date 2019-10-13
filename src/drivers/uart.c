@@ -4,7 +4,7 @@
 #include "gpio.h"
 
 
-// initialize the UART port to 
+// initialize the UART port to...err something
 void UART_init(void)
 {
     mmio_write(UART0_CR, 0x00000000);

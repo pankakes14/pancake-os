@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 #include <stdint.h>
+#include <stdbool.h>
 
 //============    BUILD SWITCHES!! ========================
 // #define RPI_MAJOR_VERSION 2
