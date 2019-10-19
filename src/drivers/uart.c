@@ -28,6 +28,8 @@ void UART_init(void)
                            (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10));
 
     mmio_write(UART0_CR, (1 << 0) | (1 << 8) | (1 << 9));
+
+    UART_putc('!');
 }
 
 

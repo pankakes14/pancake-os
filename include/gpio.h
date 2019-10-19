@@ -47,7 +47,11 @@
 // OTHER Defines
 
 #define NUM_GPIOS 54
-
+#if (RPI_MAJOR_VERSION == 1)
+ #define GPIO_ACT_LED 16
+#else
+ #define GPIO_ACT_LED 47
+#endif
 
 // FUNCTION DECLARATIONS
 
@@ -57,8 +61,8 @@ void gpio_setAsInput(uint32_t gpio_num);
 void gpio_write(uint32_t gpio_num, bool value);
 bool gpio_read(uint32_t gpio_num);
 
-void gpio_setPullUp(uint32_t gpio_num, bool pullup_on);
-void gpio_setPullDown(uint32_t gpio_num, bool pulldown_on);
+// void gpio_setPullUp(uint32_t gpio_num, bool pullup_on);
+// void gpio_setPullDown(uint32_t gpio_num, bool pulldown_on);
 
 
 

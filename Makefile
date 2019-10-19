@@ -3,8 +3,8 @@
 CC = ../tools/gcc-arm-none-eabi-8-2019-q3-update/bin/arm-none-eabi-gcc
 
 # Top level constants
-RASPI_MODEL = 2
-OUTPUT_IMAGE_NAME = pancake_os.img
+RASPI_MODEL = 1
+OUTPUT_IMAGE_NAME = kernel.img
 
 # Set any constants based on the raspberry pi model.  Version 1 has some differences to 2 and 3
 ifeq ($(RASPI_MODEL),1)
@@ -68,4 +68,4 @@ clean:
 
 #run the system emulator
 run : build
-	qemu-system-arm -m 256 -M raspi2 -serial stdio -kernel pancake_os.img
+	qemu-system-arm -m 256 -M raspi2 -serial stdio -kernel kernel.img

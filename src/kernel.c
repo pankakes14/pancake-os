@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "uart.h"
+#include "gpio.h"
 
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)

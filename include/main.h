@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 //============    BUILD SWITCHES!! ========================
-// #define RPI_MAJOR_VERSION 2
+// #define RPI_MAJOR_VERSION 1
 
 
 

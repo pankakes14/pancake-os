@@ -5,8 +5,18 @@
 // sets default states of each GPIO
 void gpio_init(void)
 {
-    gpio_setAsOutput(21);
-    gpio_write(21, true);
+    uint32_t i;
+
+    gpio_setAsOutput(GPIO_ACT_LED);
+
+    for (i=0; i < 10; i++)
+    {
+        gpio_write(GPIO_ACT_LED, false);
+        delay_count(200000);
+        gpio_write(GPIO_ACT_LED, true);
+        delay_count(200000);
+    }
+    gpio_write(GPIO_ACT_LED, false);
 }
 
 
@@ -16,7 +26,7 @@ void gpio_setAsOutput(uint32_t gpio_num)
     uint32_t shadow;
 
     // Figure out which bank of registers this GPIO belongs to
-    if (gpio_num >= 0 && gpio_num < 10)
+    if (gpio_num < 10)
     {
         reg = GPFSEL0;
     }
@@ -59,7 +69,7 @@ void gpio_setAsInput(uint32_t gpio_num)
     uint32_t shadow;
 
     // Figure out which bank of registers this GPIO belongs to
-    if (gpio_num >= 0 && gpio_num < 10)
+    if (gpio_num < 10)
     {
         reg = GPFSEL0;
     }
@@ -100,31 +110,33 @@ void gpio_write(uint32_t gpio_num, bool value)
     uint32_t reg;
     uint32_t shadow;
 
-    // choose which register specified gpio belongs to
-    if (gpio_num >= 0 && gpio_num < 32)
+    // choose which register specified gpio belongs to. This is a bit weird because this chip has 
+    // different registers for set and clear. You write a '1' to the corresponding bit in the CLR
+    // register to set it low or a '1' to the SET register to set it high
+    if (gpio_num < 32 && value)
     {
         reg = GPSET0;
     }
-    else if (gpio_num >= 32 && gpio_num < 54)
+    else if (gpio_num >= 32 && gpio_num < 54 && value)
     {
         reg = GPSET1;
+    }
+    else if (gpio_num < 32 && !value)
+    {
+        reg = GPCLR0;
+    }
+    else if (gpio_num >= 32 && gpio_num < 54 && !value)
+    {
+        reg = GPCLR1;
     }
     else
     {
         return; //invalid GPIO number. Do nothing
     }
 
-    // Read current value, set/clear bit. Each bit corresponds to value of a gpio and is 32 bits wide.
-    // ex. gpio20 is bit 20 in the first register
+    // Read current value, set bit in either clear/set register. Each bit corresponds to value of a gpio and is 32 bits wide.
     shadow = mmio_read(reg);
-    if (value)
-    {
-        shadow |= (1 << (gpio_num % 32));
-    }
-    else
-    {
-        shadow &= ~(1 << (gpio_num % 32)); 
-    }
+    shadow |= (1 << (gpio_num % 32));
     mmio_write(reg, shadow);
 }
 
@@ -135,7 +147,7 @@ bool gpio_read(uint32_t gpio_num)
     uint32_t shadow;
 
     // choose which register specified gpio belongs to
-    if (gpio_num >= 0 && gpio_num < 32)
+    if (gpio_num < 32)
     {
         reg = GPLEV0;
     }
@@ -154,12 +166,12 @@ bool gpio_read(uint32_t gpio_num)
     return (bool) shadow;
 }
 
-void gpio_setPullUp(uint32_t gpio_num, bool pullup_on)
-{
-    //not implemented yet
-}
+// void gpio_setPullUp(uint32_t gpio_num, bool pullup_on)
+// {
+//     //not implemented yet
+// }
 
-void gpio_setPullDown(uint32_t gpio_num, bool pulldown_on)
-{
-    //not implemented yet
-}
+// void gpio_setPullDown(uint32_t gpio_num, bool pulldown_on)
+// {
+//     //not implemented yet
+// }
