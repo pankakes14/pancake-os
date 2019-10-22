@@ -27,7 +27,8 @@ HEADER_DIR = include
 OBJ_DIR = build
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c) \
-			$(wildcard $(SRC_DIR)/drivers/*.c)
+			$(wildcard $(SRC_DIR)/drivers/*.c) 
+			#$(wildcard $(SRC_DIR)/util/*.c)
 
 ASM_FILES = $(SRC_DIR)/boot.s
 

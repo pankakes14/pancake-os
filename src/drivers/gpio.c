@@ -5,17 +5,7 @@
 // sets default states of each GPIO
 void gpio_init(void)
 {
-    uint32_t i;
-
     gpio_setAsOutput(GPIO_ACT_LED);
-
-    for (i=0; i < 10; i++)
-    {
-        gpio_write(GPIO_ACT_LED, false);
-        delay_count(200000);
-        gpio_write(GPIO_ACT_LED, true);
-        delay_count(200000);
-    }
     gpio_write(GPIO_ACT_LED, false);
 }
 
@@ -58,7 +48,7 @@ void gpio_setAsOutput(uint32_t gpio_num)
     // read regsiter, clear the 3 function select bits, set bit to indicate output. Write back
     shadow = mmio_read(reg);
     shadow &= (~(0x7 << ((gpio_num % 10) * 0x3))); 
-    shadow |= (1 << (gpio_num * 3));
+    shadow |= (1 << ((gpio_num % 10) * 3));
     mmio_write(reg, shadow);
 }
 
@@ -175,3 +165,37 @@ bool gpio_read(uint32_t gpio_num)
 // {
 //     //not implemented yet
 // }
+
+
+
+// Flash the activity LED to indicate first 4 bits of given pattern
+// starting from least significant bit, long flash is a 1, short is a 0
+void gpio_flashActivityLed(uint8_t pattern)
+{
+    uint32_t i, delay;
+
+    // wait a bit at the start...
+    gpio_write(GPIO_ACT_LED, true);
+    delay_count(1000 * TICK_PER_MS);
+    
+    for (i=0; i < 4; i++)
+    {
+        gpio_write(GPIO_ACT_LED, false);
+        if (pattern & 0x1)
+        {
+            delay = 500;
+        }
+        else
+        {
+            delay = 150;
+        }
+        delay_count(delay * TICK_PER_MS);
+        gpio_write(GPIO_ACT_LED, true);
+        delay_count((1000 - delay) * TICK_PER_MS);
+        pattern >>= 1;
+    }
+
+    //wait another second, then turn LED back on
+    delay_count(1000 * TICK_PER_MS);
+    gpio_write(GPIO_ACT_LED, false);
+}

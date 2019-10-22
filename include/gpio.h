@@ -60,6 +60,7 @@ void gpio_setAsOutput(uint32_t gpio_num);
 void gpio_setAsInput(uint32_t gpio_num);
 void gpio_write(uint32_t gpio_num, bool value);
 bool gpio_read(uint32_t gpio_num);
+void gpio_flashActivityLed(uint8_t pattern);
 
 // void gpio_setPullUp(uint32_t gpio_num, bool pullup_on);
 // void gpio_setPullDown(uint32_t gpio_num, bool pulldown_on);

@@ -17,3 +17,8 @@ to run the simulator. You'll have to install it first by running the following c
 Processors:
 * Rpi1 - BCM2835
 * Rpi2 - 
+
+
+# Other Info #
+
+broadcom 2835 errata: https://elinux.org/BCM2835_datasheet_errata

@@ -6,6 +6,7 @@
 //============    BUILD SWITCHES!! ========================
 // #define RPI_MAJOR_VERSION 1
 
+#define TICK_PER_MS 3508
 
 
 //==============   HELPER FUNCTIONS =======================
